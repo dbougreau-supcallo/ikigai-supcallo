@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon IKIGAI — Pôle Sup' Marcel Callo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#639922;--green-pale:#f4f9ee;
+  --teal:#0F6E56;--teal-light:#E1F5EE;--teal-mid:#1D9E75;
+  --amber:#854F0B;--amber-light:#FAEEDA;--amber-mid:#BA7517;
+  --purple:#534AB7;--purple-light:#EEEDFE;--purple-mid:#7F77DD;
+  --coral:#993C1D;--coral-light:#FAECE7;--coral-mid:#D85A30;
+  --gray:#5F5E5A;--gray-light:#F1EFE8;--gray-mid:#B4B2A9;
+  --text:#2C2C2A;--text-muted:#888780;--text-light:#B4B2A9;
+  --white:#fff;--border:#E8E6E0;--radius:14px;
+}
+body{font-family:'DM Sans',sans-serif;background:#FAFAF8;color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.header{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-img{display:flex;align-items:center}
+.logo-mark svg{width:18px;height:18px;fill:white}
+.logo-sub{font-size:11px;color:var(--text-muted)}
+.logo-title{font-size:15px;font-weight:600;color:var(--text)}
+.header-right{display:flex;align-items:center;gap:12px}
+.timer-badge{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted);background:var(--gray-light);padding:5px 11px;border-radius:20px;white-space:nowrap}
+.timer-badge span{font-weight:600;color:var(--green);min-width:38px}
+
+/* PROGRESS NAV */
+.progress-nav{background:var(--white);border-bottom:1px solid var(--border);padding:12px 24px;overflow-x:auto}
+.steps-row{display:flex;align-items:center;min-width:520px;gap:0}
+.step-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1;border:none;background:none;padding:4px 6px;transition:opacity .2s;position:relative}
+.step-btn:disabled{cursor:default}
+.step-circle{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;transition:all .3s;border:2px solid var(--border);background:var(--white);color:var(--text-muted)}
+.step-btn.done .step-circle{background:var(--teal-mid);border-color:var(--teal-mid);color:white}
+.step-btn.active .step-circle{background:var(--green);border-color:var(--green);color:white;box-shadow:0 0 0 4px var(--green-light)}
+.step-label{font-size:10px;color:var(--text-muted);white-space:nowrap;font-weight:500}
+.step-btn.active .step-label{color:var(--green);font-weight:600}
+.step-btn.done .step-label{color:var(--teal)}
+.step-connector{flex:1;height:2px;background:var(--border);transition:background .3s;max-width:40px}
+.step-connector.done{background:var(--teal-mid)}
+.progress-pct{font-size:11px;color:var(--text-muted);text-align:right;padding:4px 24px 0;font-weight:500}
+
+/* MAIN */
+.main{max-width:740px;margin:0 auto;padding:32px 24px 100px}
+
+/* SCREENS */
+.screen{display:none;animation:fadeUp .35s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* WELCOME */
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-mid);margin-bottom:8px}
+.hero-title{font-family:'DM Serif Display',serif;font-size:40px;line-height:1.12;color:var(--text);margin-bottom:14px}
+.hero-title em{font-style:italic;color:var(--green)}
+.hero-sub{font-size:16px;color:var(--text-muted);line-height:1.65;margin-bottom:28px;max-width:540px}
+
+/* VS BLOCK */
+.vs-block{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-bottom:32px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.vs-col{padding:20px}
+.vs-col.sans{background:var(--gray-light)}
+.vs-col.avec{background:var(--green-light)}
+.vs-divider{background:var(--white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text-muted);padding:0 12px;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+.vs-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.vs-col.sans .vs-title{color:var(--gray)}
+.vs-col.avec .vs-title{color:var(--green)}
+.vs-list{list-style:none}
+.vs-list li{font-size:13px;line-height:1.5;padding:4px 0;display:flex;gap:6px;align-items:flex-start}
+.vs-list li::before{flex-shrink:0;font-size:14px}
+.vs-col.sans .vs-list li::before{content:'✗';color:var(--coral-mid)}
+.vs-col.avec .vs-list li::before{content:'✓';color:var(--green)}
+
+/* IKIGAI PREVIEW CARDS */
+.quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.quad-card{padding:16px;border-radius:12px;border:1px solid transparent}
+.quad-card strong{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}
+.quad-card p{font-size:13px;line-height:1.5;opacity:.85}
+.qc-teal{background:var(--teal-light);border-color:#9FE1CB;color:var(--teal)}
+.qc-green{background:var(--green-light);border-color:#C0DD97;color:var(--green)}
+.qc-amber{background:var(--amber-light);border-color:#FAC775;color:var(--amber)}
+.qc-purple{background:var(--purple-light);border-color:#CECBF6;color:var(--purple)}
+
+/* CHIPS */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.chip{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted);background:var(--white);border:1px solid var(--border);padding:5px 11px;border-radius:20px}
+
+/* NAME INPUT */
+.name-wrap{margin-bottom:24px}
+.name-wrap label{font-size:14px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:8px}
+.name-input{font-size:18px;font-weight:500;border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;width:100%;max-width:300px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);transition:border-color .2s}
+.name-input:focus{outline:none;border-color:var(--teal-mid)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;padding:12px 22px;border-radius:10px;border:none;cursor:pointer;transition:all .18s;text-decoration:none}
+.btn-primary{background:var(--green);color:white}
+.btn-primary:hover{background:var(--green-mid);transform:translateY(-1px)}
+.btn-secondary{background:var(--white);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--gray-light)}
+.btn-ghost{background:none;color:var(--text-muted);font-size:14px;padding:8px 14px;border:none}
+.btn-ghost:hover{color:var(--text)}
+.btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.btn-group{display:flex;align-items:center;gap:10px;margin-top:28px;flex-wrap:wrap}
+
+/* SECTION HEADER */
+.dim-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;padding:20px;border-radius:var(--radius);border-left:4px solid}
+.dim-header.d1{background:var(--teal-light);border-color:var(--teal-mid)}
+.dim-header.d2{background:var(--green-light);border-color:var(--green-mid)}
+.dim-header.d3{background:var(--amber-light);border-color:var(--amber-mid)}
+.dim-header.d4{background:var(--purple-light);border-color:var(--purple-mid)}
+.dim-emoji{font-size:32px;flex-shrink:0}
+.dim-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;opacity:.7}
+.dim-title{font-family:'DM Serif Display',serif;font-size:22px;line-height:1.2;margin-bottom:4px}
+.dim-desc{font-size:14px;line-height:1.55;opacity:.85}
+
+/* Q CARD */
+.q-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:16px}
+.q-num{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
+.q-title{font-size:16px;font-weight:500;line-height:1.45;margin-bottom:14px;color:var(--text)}
+.q-sub{font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:10px;font-style:italic}
+
+/* TEXTAREA */
+textarea{width:100%;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);border:1.5px solid var(--border);border-radius:10px;padding:13px 15px;resize:none;min-height:80px;background:var(--gray-light);transition:border-color .2s;line-height:1.6}
+textarea:focus{outline:none;border-color:var(--teal-mid);background:var(--white)}
+textarea::placeholder{color:var(--text-light)}
+
+/* TAG PILLS */
+.tag-wrap{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:5px 11px;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--text-muted);transition:all .15s;user-select:none}
+.tag:hover{border-color:var(--teal-mid);color:var(--teal)}
+.tag.selected{background:var(--teal-light);border-color:var(--teal-mid);color:var(--teal);font-weight:500}
+.tag .rank{display:none;font-size:11px;font-weight:700;background:var(--teal-mid);color:white;width:16px;height:16px;border-radius:50%;align-items:center;justify-content:center}
+.tag.selected .rank{display:flex}
+
+/* IMPORTANCE SORTER */
+.sorted-list{margin-top:12px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.sorted-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--white);border-bottom:1px solid var(--border);font-size:14px;cursor:grab}
+.sorted-item:last-child{border-bottom:none}
+.sorted-item:active{cursor:grabbing}
+.rank-badge{width:22px;height:22px;border-radius:50%;background:var(--teal-light);color:var(--teal);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.drag-handle{color:var(--text-light);font-size:18px;cursor:grab;flex-shrink:0}
+.move-btns{display:flex;flex-direction:column;gap:2px;margin-left:auto}
+.move-btn{border:none;background:none;cursor:pointer;color:var(--text-muted);font-size:11px;padding:1px 4px;line-height:1}
+.move-btn:hover{color:var(--green)}
+.depth-input{margin-top:10px;font-size:13px}
+.depth-label{font-size:12px;color:var(--text-muted);margin-bottom:4px;font-weight:500}
+
+/* SLIDER */
+.slider-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.slider-label{font-size:14px;font-weight:500;flex:0 0 160px;color:var(--text)}
+.slider-track{flex:1;min-width:120px;display:flex;flex-direction:column;gap:3px}
+input[type=range]{width:100%;accent-color:var(--teal-mid);height:4px;cursor:pointer}
+.slider-endpoints{display:flex;justify-content:space-between;font-size:10px;color:var(--text-light)}
+.slider-val-badge{width:32px;height:32px;border-radius:50%;background:var(--teal-light);color:var(--teal);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--teal-mid)}
+
+/* INTENSITY SCALE */
+.intensity-scale{display:flex;gap:0;margin:10px 0;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.int-btn{flex:1;padding:8px 4px;border:none;background:var(--white);cursor:pointer;font-size:12px;text-align:center;transition:all .15s;border-right:1px solid var(--border);color:var(--text-muted);line-height:1.3}
+.int-btn:last-child{border-right:none}
+.int-btn.active{font-weight:600}
+.int-btn.int-1.active{background:#FFF3E0;color:#E65100}
+.int-btn.int-2.active{background:#FFF8E1;color:#F57F17}
+.int-btn.int-3.active{background:#F3E5F5;color:#7B1FA2}
+.int-btn.int-4.active{background:var(--teal-light);color:var(--teal)}
+
+/* EXPERIENCE QUALIFIER */
+.exp-qual{background:var(--gray-light);border-radius:10px;padding:14px;margin-top:10px}
+.exp-qual label{font-size:13px;color:var(--text-muted);display:block;margin-bottom:5px;font-weight:500}
+.exp-select{width:100%;font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;color:var(--text);background:var(--white);cursor:pointer}
+.exp-select:focus{outline:none;border-color:var(--teal-mid)}
+
+/* BLOCKED / PROCHE */
+.blocked-box{background:var(--amber-light);border:1px solid #FAC775;border-radius:12px;padding:18px;margin-top:12px;display:none}
+.blocked-box p{font-size:14px;color:var(--amber);line-height:1.6;margin-bottom:10px}
+.share-link{background:var(--white);border:1.5px dashed #FAC775;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--amber);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;word-break:break-all}
+.share-link:hover{background:#fff8f0}
+.copy-pill{background:var(--amber-mid);color:white;font-size:10px;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+
+/* RESULT */
+.result-hero{text-align:center;padding:28px 0 20px}
+.result-hero h2{font-family:'DM Serif Display',serif;font-size:32px;margin-bottom:6px}
+.result-hero p{font-size:15px;color:var(--text-muted);line-height:1.6;max-width:480px;margin:0 auto}
+.ikigai-center-block{background:var(--green);color:white;border-radius:var(--radius);padding:24px 28px;margin:20px 0;text-align:center}
+.icb-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:8px}
+.icb-sentence{font-family:'DM Serif Display',serif;font-size:20px;line-height:1.45;margin-bottom:12px}
+.icb-explain{font-size:14px;opacity:.85;line-height:1.6}
+.result-quads{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+.rq{border-radius:12px;padding:18px;border:1px solid transparent}
+.rq-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.rq-items{list-style:none}
+.rq-items li{font-size:13px;line-height:1.5;padding:3px 0;display:flex;gap:6px}
+.rq-items li::before{content:'→';flex-shrink:0;font-weight:600}
+.rq.teal{background:var(--teal-light);border-color:#9FE1CB}
+.rq.teal .rq-label{color:var(--teal)}
+.rq.teal .rq-items{color:var(--teal)}
+.rq.green{background:var(--green-light);border-color:#C0DD97}
+.rq.green .rq-label{color:var(--green)}
+.rq.green .rq-items{color:var(--green)}
+.rq.amber{background:var(--amber-light);border-color:#FAC775}
+.rq.amber .rq-label{color:var(--amber)}
+.rq.amber .rq-items{color:var(--amber)}
+.rq.purple{background:var(--purple-light);border-color:#CECBF6}
+.rq.purple .rq-label{color:var(--purple)}
+.rq.purple .rq-items{color:var(--purple)}
+
+/* INTERSECTIONS */
+.inter-title{font-size:17px;font-weight:600;margin-bottom:14px;color:var(--text)}
+.inter-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.inter-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:16px;transition:box-shadow .2s}
+.inter-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.ic-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px;letter-spacing:.04em}
+.ic-name{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.ic-what{font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:8px}
+.ic-risk{font-size:12px;padding:7px 10px;border-radius:7px;line-height:1.45}
+.ic-risk .r-label{font-weight:700;font-size:10px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+
+/* RADAR */
+#radar-canvas{display:block;margin:0 auto 20px;border-radius:12px}
+
+/* PDF TEASER */
+.pdf-teaser{border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:28px}
+.pdf-preview{background:linear-gradient(135deg,var(--green-light) 0%,var(--teal-light) 100%);padding:32px;text-align:center;border-bottom:1px solid var(--border)}
+.pdf-preview .preview-doc{background:white;border-radius:10px;padding:20px;max-width:280px;margin:0 auto;text-align:left;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+.pdf-preview .pd-header{background:var(--green);border-radius:6px;padding:10px 14px;margin-bottom:12px}
+.pdf-preview .pd-logo{font-size:11px;font-weight:700;color:white;letter-spacing:.05em}
+.pdf-preview .pd-name{font-size:10px;color:rgba(255,255,255,.8);margin-top:2px}
+.pdf-preview .pd-quad{height:30px;border-radius:5px;margin-bottom:6px;opacity:.8}
+.pdf-preview .pd-bar{height:8px;border-radius:4px;margin-bottom:4px;background:var(--gray-light)}
+.pdf-benefits{padding:24px 28px}
+.pdf-benefits h3{font-size:17px;font-weight:600;margin-bottom:6px}
+.pdf-benefits p{font-size:14px;color:var(--text-muted);line-height:1.6;margin-bottom:16px}
+.benefit-list{list-style:none;margin-bottom:20px}
+.benefit-list li{font-size:14px;padding:6px 0;display:flex;gap:8px;align-items:flex-start;border-bottom:1px solid var(--border)}
+.benefit-list li:last-child{border-bottom:none}
+.benefit-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* RDV SECTION */
+.rdv-section{background:var(--green);color:white;border-radius:var(--radius);padding:28px;margin-top:16px}
+.rdv-title{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px}
+.rdv-sub{font-size:14px;opacity:.85;line-height:1.6;margin-bottom:20px}
+.rdv-deliverables{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.rdv-item{background:rgba(255,255,255,.15);border-radius:10px;padding:14px;text-align:center}
+.rdv-item .ri-icon{font-size:24px;margin-bottom:6px}
+.rdv-item .ri-label{font-size:12px;font-weight:600;line-height:1.3}
+.btn-white{background:white;color:var(--green);font-weight:600}
+.btn-white:hover{background:var(--green-light)}
+
+/* PLAN D'ACTION */
+.plan-section{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;margin-top:14px}
+.plan-title{font-size:17px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.plan-steps{list-style:none}
+.plan-step{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+.plan-step:last-child{border-bottom:none}
+.ps-num{width:26px;height:26px;border-radius:50%;background:var(--green-light);color:var(--green);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ps-content .ps-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.ps-content .ps-desc{font-size:13px;color:var(--text-muted);line-height:1.5}
+.ps-content .ps-timing{font-size:11px;font-weight:600;color:var(--teal-mid);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+
+/* PROCHE SCREEN */
+.proche-wrap{max-width:600px;margin:0 auto}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.hidden{display:none}
+.modal-box{background:var(--white);border-radius:var(--radius);padding:28px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--gray-light);border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;font-size:16px;color:var(--text-muted);display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--border)}
+.modal-h{font-size:20px;font-weight:600;margin-bottom:6px}
+.modal-p{font-size:14px;color:var(--text-muted);line-height:1.6;margin-bottom:16px}
+
+/* MISC */
+hr.div{border:none;border-top:1px solid var(--border);margin:28px 0}
+.alert{padding:12px 16px;border-radius:8px;font-size:14px;margin-bottom:14px;line-height:1.5}
+.alert-success{background:var(--teal-light);color:var(--teal);border:1px solid var(--teal-mid)}
+
+@media(max-width:620px){
+  .result-quads,.inter-grid,.rdv-deliverables{grid-template-columns:1fr}
+  .quad-grid{grid-template-columns:1fr}
+  .vs-block{grid-template-columns:1fr}
+  .vs-divider{padding:8px;border:none;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .hero-title{font-size:30px}
+  .main{padding:20px 16px 80px}
+  .slider-label{flex:0 0 120px;font-size:13px}
+}
+
+@media print{
+  .header,.progress-nav,.btn-group,.pdf-teaser,.rdv-section,.plan-section,
+  .proche-banner,.modal-overlay{display:none!important}
+  .screen{display:none!important}
+  #screen-5{display:block!important}
+  body{background:white!important}
+  .ikigai-center-block{background:#3B6D11!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{margin:15mm;size:A4}
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-img">
+        <img src="data:image/jpeg;base64,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" alt="Logo Pôle Sup Marcel Callo" style="height:42px;width:auto;display:block;border-radius:4px">
+      </div>
+      <div>
+        <div class="logo-sub">Pôle Sup' Marcel Callo</div>
+        <div class="logo-title">Mon IKIGAI</div>
+      </div>
+  </div>
+  <div class="header-right">
+    <div id="timer-badge-hidden" style="display:none"><span id="timer-display">20:00</span></div>
+  </div>
+</div>
+
+<!-- PROGRESS NAV -->
+<div class="progress-nav">
+  <div class="steps-row" id="steps-row"></div>
+  <div class="progress-pct" id="pct-display">0% complété</div>
+</div>
+
+<div class="main">
+
+<!-- ===== S0 : WELCOME ===== -->
+<div class="screen active" id="screen-0">
+  <p class="hero-eyebrow">Pôle Sup' Marcel Callo — Outil d'orientation</p>
+  <h1 class="hero-title">Découvre ta<br><em>raison d'être</em></h1>
+  <p class="hero-sub">L'IKIGAI est une philosophie japonaise qui t'aide à trouver le carrefour entre ce qui t'anime, ce en quoi tu excelles, ce dont le monde a besoin et ce qui peut te faire vivre. Ensemble, on va le dessiner étape par étape.</p>
+
+  <!-- VS BLOCK -->
+  <div class="vs-block">
+    <div class="vs-col sans">
+      <div class="vs-title">😕 Sans IKIGAI</div>
+      <ul class="vs-list">
+        <li>Tu choisis une filière "par défaut"</li>
+        <li>Tu changes d'avis en cours de route</li>
+        <li>Tu travailles sans vraiment savoir pourquoi</li>
+        <li>Tu te sens vite démotivé(e)</li>
+        <li>Tu peines à te vendre en entretien</li>
+      </ul>
+    </div>
+    <div class="vs-divider">VS</div>
+    <div class="vs-col avec">
+      <div class="vs-title">🌟 Avec ton IKIGAI</div>
+      <ul class="vs-list">
+        <li>Tu choisis ta filière avec conviction</li>
+        <li>Tu sais expliquer pourquoi tu veux ce poste</li>
+        <li>Tu travailles avec un sens clair</li>
+        <li>Tu restes motivé(e) même dans les difficultés</li>
+        <li>Tu décroches plus facilement ton alternance</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quad-grid">
+    <div class="quad-card qc-teal"><strong>❤️ Ce que tu aimes</strong><p>Tes passions, ce qui te fait vibrer et perdre la notion du temps</p></div>
+    <div class="quad-card qc-green"><strong>⚡ Ce en quoi tu es doué(e)</strong><p>Tes talents naturels, ce qui coule de source pour toi</p></div>
+    <div class="quad-card qc-amber"><strong>🌍 Ce dont le monde a besoin</strong><p>Ce qui te touche, t'indigne, te donne envie d'agir</p></div>
+    <div class="quad-card qc-purple"><strong>💶 Ce pour quoi tu peux être payé(e)</strong><p>Tes compétences, expériences et secteurs qui créent de la valeur</p></div>
+  </div>
+
+  <div class="chips">
+    
+    <div class="chip">🔄 Retour possible à chaque étape</div>
+    <div class="chip">🤝 Option "demander à mes proches"</div>
+    <div class="chip">📄 PDF personnalisé téléchargeable</div>
+  </div>
+
+  <div class="name-wrap">
+    <label>Pour commencer, comment tu t'appelles ?</label>
+    <input type="text" id="user-name" class="name-input" placeholder="Ton prénom..." autocomplete="given-name">
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="startJourney()">
+      Commencer mon IKIGAI
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <button class="btn btn-secondary" onclick="goTo(10)">
+      Répondre pour un proche
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ===== S1 : CE QUE TU AIMES ===== -->
+<div class="screen" id="screen-1">
+  <div class="dim-header d1">
+    <div class="dim-emoji">❤️</div>
+    <div>
+      <div class="dim-eyebrow" style="color:var(--teal)">Dimension 1 sur 4</div>
+      <div class="dim-title" style="color:var(--teal)">Ce que tu aimes</div>
+      <div class="dim-desc" style="color:var(--teal)">Pense aux moments où tu perds la notion du temps, où tu es dans ton élément. Pas besoin que ce soit lié au travail.</div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card">
+    <div class="q-num">Question 1 — Plonge dans ton passé</div>
+    <div class="q-title">Quand tu étais enfant ou ado, qu'est-ce qui t'absorbait complètement, au point d'oublier l'heure ?</div>
+    <p class="q-sub">Souviens-toi d'un moment précis. Qu'est-ce que tu faisais ? Avec qui ? Dans quel contexte ?</p>
+    <textarea id="q1-1" placeholder="Ex : Je pouvais passer des heures à construire des maquettes dans ma chambre, ou à expliquer des trucs à mes potes comme si j'étais prof..." oninput="autoResize(this)"></textarea>
+  </div>
+
+  <!-- Q2 avec ranking -->
+  <div class="q-card">
+    <div class="q-num">Question 2 — Tes activités qui t'énergivent</div>
+    <div class="q-title">Quelles activités ou sujets te donnent de l'énergie plutôt qu'ils t'en prennent ?</div>
+    <p class="q-sub">Sélectionne ce qui te parle, puis <strong>classe-les par ordre d'importance</strong> avec les flèches ↑↓</p>
+    <div class="tag-wrap" id="tags-1">
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🎨 Créer / Dessiner<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">💻 Tech / Code<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🤝 Aider les autres<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🌿 Nature / Environnement<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">📚 Apprendre / Lire<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🏃 Sport / Mouvement<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🎵 Musique / Art<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🗣️ Parler / Convaincre<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🔧 Réparer / Bricoler<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">✈️ Voyager / Découvrir<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🎮 Jeux / Stratégie<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">📸 Photo / Vidéo<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">💡 Innover / Inventer<span class="rank"></span></span>
+      <span class="tag" onclick="toggleTagRank(this,'tags-1','sorted-1')">🍳 Cuisiner / Créer<span class="rank"></span></span>
+    </div>
+    <div id="sorted-1" class="sorted-list" style="display:none;margin-top:14px"></div>
+    <div class="depth-input" id="depth-1" style="display:none">
+      <div class="depth-label">💬 Pour aller plus loin sur ta #1 passion : qu'est-ce qui te plaît exactement dedans ?</div>
+      <textarea id="q1-2-depth" placeholder="Ce qui me plaît vraiment dans ma passion principale, c'est..." oninput="autoResize(this)" style="min-height:60px"></textarea>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card">
+    <div class="q-num">Question 3 — Ta journée idéale</div>
+    <div class="q-title">Si tu n'avais aucune contrainte (argent, opinion des autres, notes...) à quoi ressemblerait ta journée idéale dans 5 ans ?</div>
+    <p class="q-sub">Cette réponse alimentera directement ta vision IKIGAI — sois le plus précis(e) possible.</p>
+    <textarea id="q1-3" placeholder="Je me lèverais à... je travaillerais sur... je rencontrerais des gens qui... le soir je me sentirais..." oninput="autoResize(this)"></textarea>
+    <div class="blocked-box" id="blocked-1">
+      <p>💛 Tu bloques sur cette question ? Envoie ce lien à un proche — ses réponses enrichiront ton profil.</p>
+      <div class="share-link" onclick="copyShareLink(this)">🔗 https://ikigai-callo.fr/proche?dim=1&token=<span class="token">abc123</span><span class="copy-pill">Copier</span></div>
+      <p style="font-size:12px;margin-top:8px">→ Ton proche répondra à 5 questions bienveillantes sur toi.</p>
+    </div>
+    <button class="btn btn-ghost" onclick="toggleBlocked('blocked-1')" style="padding:6px 0;font-size:13px;margin-top:8px">Je bloque → demander à un proche</button>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="goTo(2)">Continuer <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-ghost" onclick="goTo(0)">← Retour</button>
+  </div>
+</div>
+
+<!-- ===== S2 : TALENTS ===== -->
+<div class="screen" id="screen-2">
+  <div class="dim-header d2">
+    <div class="dim-emoji">⚡</div>
+    <div>
+      <div class="dim-eyebrow" style="color:var(--green)">Dimension 2 sur 4</div>
+      <div class="dim-title" style="color:var(--green)">Ce en quoi tu es doué(e)</div>
+      <div class="dim-desc" style="color:var(--green)">Tes talents, c'est ce qui coule de source pour toi — même si tu penses que "tout le monde peut faire ça". Spoiler : non.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 1 — Le regard des autres</div>
+    <div class="q-title">Qu'est-ce que tes amis, ta famille ou tes profs te demandent souvent de faire ou t'ont complimenté(e) ?</div>
+    <p class="q-sub">Les compliments répétés sont souvent les meilleurs indicateurs de tes talents naturels.</p>
+    <textarea id="q2-1" placeholder='Ex : "Tu expliques toujours super clairement", "Tu gardes ton calme quand tout le monde panique", "T''as toujours des idées originales"...' oninput="autoResize(this)"></textarea>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 2 — Ton auto-évaluation de compétences</div>
+    <div class="q-title">Évalue ton niveau sur chacune de ces compétences. Tes <strong style="color:var(--green)">top 3</strong> alimenteront directement ton profil IKIGAI.</div>
+    <p class="q-sub">1 = c'est vraiment difficile pour moi → 10 = c'est naturel et je le fais mieux que la plupart</p>
+    <div id="skills-wrap" style="margin-top:16px"></div>
+    <div id="top3-preview" style="margin-top:12px;padding:10px 14px;background:var(--green-light);border-radius:8px;display:none">
+      <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">⚡ Tes 3 forces principales</div>
+      <div id="top3-list" style="font-size:14px;color:var(--green)"></div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 3 — L'appel d'urgence</div>
+    <div class="q-title">Si un ami avait besoin d'aide pour quelque chose d'important, pour quoi il t'appellerait <em>toi</em> en premier ?</div>
+    <textarea id="q2-3" placeholder="Il m'appellerait pour... parce que je..." oninput="autoResize(this)"></textarea>
+    <div class="blocked-box" id="blocked-2">
+      <p>💛 Tu doutes de tes talents ? C'est normal. Envoie ce lien à 2-3 personnes qui te connaissent bien.</p>
+      <div class="share-link" onclick="copyShareLink(this)">🔗 https://ikigai-callo.fr/proche?dim=2&token=<span class="token">abc123</span><span class="copy-pill">Copier</span></div>
+    </div>
+    <button class="btn btn-ghost" onclick="toggleBlocked('blocked-2')" style="padding:6px 0;font-size:13px;margin-top:8px">Je ne vois pas mes talents → demander à un proche</button>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="goTo(3)">Continuer <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-ghost" onclick="goTo(1)">← Retour</button>
+  </div>
+</div>
+
+<!-- ===== S3 : MONDE ===== -->
+<div class="screen" id="screen-3">
+  <div class="dim-header d3">
+    <div class="dim-emoji">🌍</div>
+    <div>
+      <div class="dim-eyebrow" style="color:var(--amber)">Dimension 3 sur 4</div>
+      <div class="dim-title" style="color:var(--amber)">Ce dont le monde a besoin</div>
+      <div class="dim-desc" style="color:var(--amber)">Qu'est-ce qui t'indigne, t'émeut, te donne envie d'agir ? C'est souvent là que se cache ta mission.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 1 — Ce qui te touche</div>
+    <div class="q-title">Qu'est-ce qui te révolte ou t'émeut profondément dans le monde actuel ?</div>
+    <p class="q-sub">Quand tu lis les infos ou que tu observes ton environnement, qu'est-ce qui te touche le plus ?</p>
+    <textarea id="q3-1" placeholder="Ex : les inégalités entre les gens, la pollution, les jeunes sans perspective, les personnes seules, le gaspillage alimentaire..." oninput="autoResize(this)"></textarea>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 2 — L'intensité de tes engagements</div>
+    <div class="q-title">Quelles causes te tiennent à cœur ? Indique l'intensité pour chacune.</div>
+    <p class="q-sub">Sélectionne une cause puis choisis ton niveau d'engagement — ça affine ton profil.</p>
+    <div id="causes-list"></div>
+    <div class="tag-wrap" style="margin-top:12px" id="causes-tags">
+      <span class="tag" onclick="addCause(this)">♻️ Environnement</span>
+      <span class="tag" onclick="addCause(this)">⚕️ Santé & bien-être</span>
+      <span class="tag" onclick="addCause(this)">🎓 Éducation</span>
+      <span class="tag" onclick="addCause(this)">⚖️ Justice sociale</span>
+      <span class="tag" onclick="addCause(this)">💡 Innovation tech</span>
+      <span class="tag" onclick="addCause(this)">🏘️ Lien social</span>
+      <span class="tag" onclick="addCause(this)">🌏 Solidarité internationale</span>
+      <span class="tag" onclick="addCause(this)">🐾 Protection animale</span>
+      <span class="tag" onclick="addCause(this)">🔐 Numérique responsable</span>
+      <span class="tag" onclick="addCause(this)">🏗️ Infrastructure & mobilité</span>
+      <span class="tag" onclick="addCause(this)">🎨 Culture & patrimoine</span>
+      <span class="tag" onclick="addCause(this)">👶 Enfance & famille</span>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 3 — Ta vision à 10 ans</div>
+    <div class="q-title">Dans 10 ans, si tu regardes en arrière et que tu es fier(e) de ta contribution, c'est pour quoi ?</div>
+    <textarea id="q3-3" placeholder="J'ai contribué à... j'ai aidé des gens à... j'ai créé quelque chose qui..." oninput="autoResize(this)"></textarea>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="goTo(4)">Continuer <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn btn-ghost" onclick="goTo(2)">← Retour</button>
+  </div>
+</div>
+
+<!-- ===== S4 : VALEUR ===== -->
+<div class="screen" id="screen-4">
+  <div class="dim-header d4">
+    <div class="dim-emoji">💶</div>
+    <div>
+      <div class="dim-eyebrow" style="color:var(--purple)">Dimension 4 sur 4</div>
+      <div class="dim-title" style="color:var(--purple)">Ce pour quoi tu peux être payé(e)</div>
+      <div class="dim-desc" style="color:var(--purple)">Même sans grande expérience, tu crées déjà de la valeur. On va le mettre en lumière.</div>
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 1 — Tes expériences concrètes</div>
+    <div class="q-title">As-tu déjà rendu service, contribué à un projet ou eu une responsabilité quelconque ? Décris une situation qui t'a valorisé(e).</div>
+    <p class="q-sub">Petite ou grande expérience, tout compte : bénévolat, babysitting, projet scolaire, stage, job d'été, tâche pour un voisin...</p>
+    <textarea id="q4-1" placeholder="Raconte une situation concrète : qu'as-tu fait, pour qui, et quel a été l'impact ?" oninput="autoResize(this)"></textarea>
+    <div class="exp-qual" id="exp-qual-1" style="display:none">
+      <label>Qualifie cette expérience :</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">
+        <div>
+          <label style="font-size:12px;color:var(--text-muted)">Type d'expérience</label>
+          <select class="exp-select" id="exp-type-1">
+            <option value="">Choisir...</option>
+            <option>Bénévolat / Associatif</option>
+            <option>Stage / Immersion pro</option>
+            <option>Job étudiant / Saisonnier</option>
+            <option>Projet scolaire / Perso</option>
+            <option>Responsabilité familiale</option>
+            <option>Entrepreneuriat / Initiative</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;color:var(--text-muted)">Impact perçu</label>
+          <select class="exp-select" id="exp-impact-1">
+            <option value="">Choisir...</option>
+            <option>Faible — j'ai appris</option>
+            <option>Moyen — j'ai contribué</option>
+            <option>Fort — j'ai fait la différence</option>
+            <option>Très fort — résultats mesurables</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-ghost" onclick="toggleExpQual('exp-qual-1')" style="padding:6px 0;font-size:12px;margin-top:8px;color:var(--text-muted)">+ Qualifier cette expérience</button>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 2 — Tes compétences et formations</div>
+    <div class="q-title">Quelles compétences, formations ou savoirs as-tu déjà — ou envisages-tu d'acquérir prochainement ?</div>
+    <textarea id="q4-2" placeholder="Ex : Bac S, BAFA, Excel, Canva, Permis B, niveau B2 anglais, formation vidéo, Code HTML..." oninput="autoResize(this)"></textarea>
+    <div class="exp-qual" id="exp-qual-2" style="display:none;margin-top:10px">
+      <label>Niveau global actuel :</label>
+      <div class="slider-row" style="margin-top:8px;margin-bottom:0">
+        <div class="slider-track">
+          <div class="slider-endpoints"><span>Débutant</span><span>Confirmé</span><span>Expert</span></div>
+          <input type="range" min="1" max="10" value="4" id="competence-level" oninput="document.getElementById('comp-val').textContent=this.value">
+        </div>
+        <div class="slider-val-badge" id="comp-val">4</div>
+      </div>
+    </div>
+    <button class="btn btn-ghost" onclick="toggleExpQual('exp-qual-2')" style="padding:6px 0;font-size:12px;margin-top:8px;color:var(--text-muted)">+ Évaluer mon niveau global</button>
+  </div>
+
+  <div class="q-card">
+    <div class="q-num">Question 3 — Secteurs qui t'attirent</div>
+    <div class="q-title">Quels secteurs ou types d'environnements de travail t'attirent ? Indique ton niveau d'intérêt.</div>
+    <p class="q-sub">Sélectionne un secteur puis ajuste son importance — ça influencera tes recommandations d'alternance.</p>
+    <div id="sectors-list"></div>
+    <div class="tag-wrap" style="margin-top:10px" id="sectors-tags">
+      <span class="tag" onclick="addSector(this)">🏥 Santé / Médico-social</span>
+      <span class="tag" onclick="addSector(this)">💻 Numérique / Tech</span>
+      <span class="tag" onclick="addSector(this)">🌿 Développement durable</span>
+      <span class="tag" onclick="addSector(this)">🎨 Création / Design</span>
+      <span class="tag" onclick="addSector(this)">🤝 Commerce / Relation client</span>
+      <span class="tag" onclick="addSector(this)">🔧 Industrie / Technique</span>
+      <span class="tag" onclick="addSector(this)">📚 Enseignement / Formation</span>
+      <span class="tag" onclick="addSector(this)">🎯 Marketing / Com'</span>
+      <span class="tag" onclick="addSector(this)">🍴 Hôtellerie / Restauration</span>
+      <span class="tag" onclick="addSector(this)">✈️ Transport / Logistique</span>
+      <span class="tag" onclick="addSector(this)">🏗️ BTP / Architecture</span>
+      <span class="tag" onclick="addSector(this)">🎬 Audiovisuel / Médias</span>
+      <span class="tag" onclick="addSector(this)">🐾 Agriculture / Animaux</span>
+      <span class="tag" onclick="addSector(this)">⚖️ Droit / Juridique</span>
+    </div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="generateResult()">✨ Voir mon IKIGAI !</button>
+    <button class="btn btn-ghost" onclick="goTo(3)">← Retour</button>
+  </div>
+</div>
+
+<!-- ===== S5 : RÉSULTAT ===== -->
+<div class="screen" id="screen-5">
+  <div class="result-hero">
+    <h2 id="result-greeting">🌟 Ton IKIGAI</h2>
+    <p>Voici ce que tes réponses révèlent. C'est un point de départ vivant — il évoluera avec toi au fil de tes expériences.</p>
+  </div>
+
+  <canvas id="radar-canvas" width="360" height="290"></canvas>
+
+  <!-- IKIGAI CENTRAL -->
+  <div class="ikigai-center-block">
+    <div class="icb-label">✦ Ta raison d'être — ton IKIGAI</div>
+    <div class="icb-sentence" id="ikigai-sentence">...</div>
+    <div class="icb-explain" id="ikigai-explain">...</div>
+  </div>
+
+  <!-- 4 QUADRANTS -->
+  <div class="result-quads">
+    <div class="rq teal">
+      <div class="rq-label">❤️ Ce que tu aimes</div>
+      <ul class="rq-items" id="r-aimes"></ul>
+    </div>
+    <div class="rq green">
+      <div class="rq-label">⚡ Ce en quoi tu es doué(e)</div>
+      <ul class="rq-items" id="r-talents"></ul>
+    </div>
+    <div class="rq amber">
+      <div class="rq-label">🌍 Ce dont le monde a besoin</div>
+      <ul class="rq-items" id="r-monde"></ul>
+    </div>
+    <div class="rq purple">
+      <div class="rq-label">💶 Ce pour quoi tu peux être payé(e)</div>
+      <ul class="rq-items" id="r-paie"></ul>
+    </div>
+  </div>
+
+  <!-- 4 INTERSECTIONS -->
+  <div class="inter-title">Les 4 carrefours de ton IKIGAI — comprendre ce qu'ils signifient pour toi</div>
+  <div class="inter-grid" id="inter-grid"></div>
+
+  <hr class="div">
+
+  <!-- PDF TEASER -->
+  <div class="pdf-teaser">
+    <div class="pdf-preview">
+      <div class="preview-doc">
+        <div class="pd-header">
+          <div class="pd-logo">MON IKIGAI — Pôle Sup' Callo</div>
+          <div class="pd-name" id="pdf-preview-name">Prénom — Date</div>
+        </div>
+        <div class="pd-quad" style="background:var(--teal-light)"></div>
+        <div class="pd-quad" style="background:var(--green-light)"></div>
+        <div class="pd-bar" style="width:90%"></div>
+        <div class="pd-bar" style="width:70%"></div>
+        <div class="pd-bar" style="width:80%"></div>
+      </div>
+    </div>
+    <div class="pdf-benefits">
+      <h3>📄 Télécharge ton IKIGAI personnalisé</h3>
+      <p>Un document clair et concret à garder, à montrer à un conseiller ou à partager avec tes proches. Parce que ton IKIGAI mérite de sortir de l'écran.</p>
+      <ul class="benefit-list">
+        <li>Tes 4 dimensions complètes avec tes réponses personnalisées</li>
+        <li>Ton radar de compétences et ton score par dimension</li>
+        <li>Ta phrase IKIGAI — ta raison d'être en une formule</li>
+        <li>Les 4 intersections expliquées pour ta situation</li>
+        <li>Ton plan d'action IKIGAI en 5 étapes concrètes</li>
+        <li>Les filières et types d'alternance recommandés</li>
+      </ul>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+        <button class="btn btn-primary" onclick="generatePDF()">
+          <svg viewBox="0 0 24 24" style="width:17px;height:17px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Télécharger PDF
+        </button>
+        <button class="btn btn-secondary" onclick="sendByEmail()">
+          <svg viewBox="0 0 24 24" style="width:17px;height:17px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+          Recevoir par email
+        </button>
+        <button class="btn btn-secondary" onclick="window.print()">
+          <svg viewBox="0 0 24 24" style="width:17px;height:17px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimer / PDF
+        </button>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:4px">&#x1F4A1; Si le PDF bloque, utilise <strong>Imprimer &#x2192; Enregistrer en PDF</strong></p>
+    </div>
+  </div>
+
+  <!-- PLAN D'ACTION -->
+  <div class="plan-section">
+    <div class="plan-title">🗓️ Ton plan d'action IKIGAI</div>
+    <ul class="plan-steps" id="plan-steps"></ul>
+  </div>
+
+  <!-- RDV -->
+  <div class="rdv-section">
+    <div class="rdv-title">📅 Prendre rendez-vous avec un conseiller</div>
+    <div class="rdv-sub">Ton IKIGAI est un point de départ. Un conseiller du Pôle Sup Marcel Callo peut t'aider à le transformer en projet concret, adapté à ta réalité et à tes ambitions.</div>
+    <div class="rdv-deliverables">
+      <div class="rdv-item">
+        <div class="ri-icon">🎓</div>
+        <div class="ri-label" id="rdv-filiere">Filières à envisager</div>
+      </div>
+      <div class="rdv-item">
+        <div class="ri-icon">🏢</div>
+        <div class="ri-label" id="rdv-entreprise">Type d'entreprise en alternance</div>
+      </div>
+      <div class="rdv-item">
+        <div class="ri-icon">🎯</div>
+        <div class="ri-label" id="rdv-missions">Missions à privilégier</div>
+      </div>
+    </div>
+    <button class="btn btn-white" onclick="window.open('mailto:contact@lyceemarcelcallo.org?subject=RDV%20IKIGAI%20-%20'+encodeURIComponent(userName)+'&body=Bonjour%2C%0A%0AJe%20viens%20de%20compléter%20mon%20IKIGAI%20et%20je%20souhaite%20prendre%20rendez-vous%20avec%20un%20conseiller.%0A%0AMon%20prénom%20:%20'+encodeURIComponent(userName))">
+      Contacter un conseiller Callo →
+    </button>
+  </div>
+
+  <!-- PROCHE SECTION -->
+  <div style="background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:var(--radius);padding:20px 24px;margin-top:14px">
+    <div style="font-size:16px;font-weight:600;color:var(--purple);margin-bottom:6px">🤝 Enrichis ton IKIGAI avec l'avis de tes proches</div>
+    <p style="font-size:14px;color:var(--purple-mid);line-height:1.6;margin-bottom:12px">Souvent, les autres voient des forces en nous qu'on ne perçoit pas soi-même. Envoie ce lien à 2-3 personnes qui te connaissent bien.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-secondary" style="font-size:14px" onclick="document.getElementById('share-modal').classList.remove('hidden')">🔗 Partager à un proche</button>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;text-align:center">
+    <button class="btn btn-ghost" onclick="goTo(0);resetAll()">Recommencer depuis le début</button>
+  </div>
+</div>
+
+
+<!-- ===== S6 : RESSOURCES ===== -->
+<div class="screen" id="screen-6">
+  <div style="margin-bottom:24px">
+    <p class="hero-eyebrow">Pôle Sup' Marcel Callo</p>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px">📁 Ressources & documents</h2>
+    <p style="font-size:15px;color:var(--text-muted);line-height:1.6;max-width:540px">
+      Les conseillers du Pôle Sup' Marcel Callo mettent à ta disposition des documents pour t'aider à construire ton projet professionnel.
+    </p>
+  </div>
+
+  <!-- DRIVE LINK BANNER -->
+  <div style="background:linear-gradient(135deg,var(--green) 0%,var(--teal) 100%);border-radius:var(--radius);padding:28px;margin-bottom:24px;color:white;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="font-size:48px;flex-shrink:0">📂</div>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:6px">Google Drive Callo</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px">Tous les documents en un seul endroit</div>
+      <p style="font-size:14px;opacity:.85;line-height:1.5;margin-bottom:14px">Fiches métiers, modèles de CV, lettres de motivation, ressources d'orientation — mis à jour par l'équipe pédagogique.</p>
+      <a id="drive-main-link" href="https://drive.google.com/drive/folders/VOTRE_DOSSIER_ID" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:8px;background:white;color:var(--green);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:11px 20px;border-radius:10px;text-decoration:none;transition:opacity .2s"
+         onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Ouvrir le Drive Callo
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- 3 CATEGORIES -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px" id="resource-grid">
+
+    <!-- Fiches métiers -->
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.09)'" onmouseout="this.style.boxShadow='none'">
+      <div style="background:var(--teal-light);padding:18px 16px 14px">
+        <div style="font-size:28px;margin-bottom:6px">🎯</div>
+        <div style="font-size:14px;font-weight:700;color:var(--teal)">Fiches métiers & filières</div>
+      </div>
+      <div style="padding:14px 16px">
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:12px">BTS, Bachelor, débouchés professionnels, témoignages d'étudiants en alternance.</p>
+        <ul style="list-style:none;margin-bottom:14px">
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--teal)">→</span> Fiches BTS par secteur</li>
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--teal)">→</span> Débouchés & salaires</li>
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--teal)">→</span> Témoignages alternants</li>
+        </ul>
+        <a href="https://drive.google.com/drive/folders/FICHES_METIERS_ID" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--teal);text-decoration:none">
+          Accéder
+          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--teal);fill:none;stroke-width:2.5;stroke-linecap:round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- CV & Lettres -->
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.09)'" onmouseout="this.style.boxShadow='none'">
+      <div style="background:var(--green-light);padding:18px 16px 14px">
+        <div style="font-size:28px;margin-bottom:6px">📝</div>
+        <div style="font-size:14px;font-weight:700;color:var(--green)">CV & lettres de motivation</div>
+      </div>
+      <div style="padding:14px 16px">
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:12px">Modèles prêts à personnaliser, exemples réussis, conseils de mise en page.</p>
+        <ul style="list-style:none;margin-bottom:14px">
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--green)">→</span> Modèles CV Word / Canva</li>
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--green)">→</span> Lettres de motivation type</li>
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--green)">→</span> Scripts CV vidéo</li>
+        </ul>
+        <a href="https://drive.google.com/drive/folders/CV_LETTRES_ID" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--green);text-decoration:none">
+          Accéder
+          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--green);fill:none;stroke-width:2.5;stroke-linecap:round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Ressources orientation -->
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.09)'" onmouseout="this.style.boxShadow='none'">
+      <div style="background:var(--amber-light);padding:18px 16px 14px">
+        <div style="font-size:28px;margin-bottom:6px">🧭</div>
+        <div style="font-size:14px;font-weight:700;color:var(--amber)">Orientation & alternance</div>
+      </div>
+      <div style="padding:14px 16px">
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin-bottom:12px">Guides Onisep, calendrier de l'alternance, droits & aides financières.</p>
+        <ul style="list-style:none;margin-bottom:14px">
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--amber)">→</span> Guides Onisep sélectionnés</li>
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--amber)">→</span> Calendrier recherche alternance</li>
+          <li style="font-size:12px;color:var(--text-muted);padding:3px 0;display:flex;gap:6px"><span style="color:var(--amber)">→</span> Aides & financements</li>
+        </ul>
+        <a href="https://drive.google.com/drive/folders/ORIENTATION_ID" target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--amber);text-decoration:none">
+          Accéder
+          <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--amber);fill:none;stroke-width:2.5;stroke-linecap:round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIENS UTILES EXTERNES -->
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:14px;color:var(--text)">🔗 Liens utiles recommandés par Callo</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <a href="https://www.onisep.fr" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--gray-light);border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;transition:background .15s" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--gray-light)'">
+        <span style="font-size:20px">🎓</span><div><div>Onisep.fr</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">Fiches métiers officielles</div></div>
+      </a>
+      <a href="https://www.alternance.emploi.gouv.fr" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--gray-light);border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;transition:background .15s" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--gray-light)'">
+        <span style="font-size:20px">🤝</span><div><div>Portail Alternance</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">Offres d'alternance officielles</div></div>
+      </a>
+      <a href="https://www.parcoursup.gouv.fr" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--gray-light);border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;transition:background .15s" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--gray-light)'">
+        <span style="font-size:20px">📋</span><div><div>Parcoursup</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">Admissions post-bac</div></div>
+      </a>
+      <a href="https://www.lyceemarcelcallo.org" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--green-light);border-radius:8px;text-decoration:none;color:var(--green);font-size:13px;font-weight:500;border:1px solid #C0DD97;transition:background .15s" onmouseover="this.style.background='#d4edb0'" onmouseout="this.style.background='var(--green-light)'">
+        <span style="font-size:20px">🏫</span><div><div>Pôle Sup Marcel Callo</div><div style="font-size:11px;color:var(--green-mid);font-weight:400">Site officiel de l'établissement</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- CONTACT CONSEILLER -->
+  <div style="background:var(--green);color:white;border-radius:var(--radius);padding:22px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:4px">📅 Tu veux un RDV avec un conseiller ?</div>
+      <p style="font-size:13px;opacity:.85;line-height:1.5;margin-bottom:12px">Un conseiller Callo peut t'aider à exploiter ces ressources et construire ton plan d'action personnalisé.</p>
+      <a href="mailto:contact@lyceemarcelcallo.org?subject=Demande%20RDV%20Orientation" style="display:inline-flex;align-items:center;gap:7px;background:white;color:var(--green);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:10px 18px;border-radius:8px;text-decoration:none">
+        Contacter un conseiller →
+      </a>
+    </div>
+    <div style="text-align:right;flex-shrink:0">
+      <div style="font-size:12px;opacity:.7;margin-bottom:2px">📞 02 99 71 41 33</div>
+      <div style="font-size:12px;opacity:.7">21 av. Etienne Gason, 35600 Redon</div>
+    </div>
+  </div>
+
+  <!-- NOTE BACK OFFICE -->
+  <div style="background:var(--amber-light);border:1px solid #FAC775;border-radius:10px;padding:14px 18px;margin-top:16px;display:flex;gap:10px;align-items:flex-start">
+    <span style="font-size:18px;flex-shrink:0">💡</span>
+    <div>
+      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:4px">Pour les conseillers — Mettre à jour les liens</div>
+      <div style="font-size:12px;color:var(--amber);line-height:1.5">
+        Remplacez les liens Google Drive dans le fichier <code style="background:rgba(0,0,0,.08);padding:1px 5px;border-radius:3px">index.html</code> :
+        recherchez <code style="background:rgba(0,0,0,.08);padding:1px 5px;border-radius:3px">VOTRE_DOSSIER_ID</code>, <code style="background:rgba(0,0,0,.08);padding:1px 5px;border-radius:3px">FICHES_METIERS_ID</code>,
+        <code style="background:rgba(0,0,0,.08);padding:1px 5px;border-radius:3px">CV_LETTRES_ID</code>, <code style="background:rgba(0,0,0,.08);padding:1px 5px;border-radius:3px">ORIENTATION_ID</code>
+        par vos vrais identifiants de dossiers Drive.
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-group" style="margin-top:24px">
+    <button class="btn btn-primary" onclick="goTo(currentScreen>0?currentScreen:5)">
+      <svg viewBox="0 0 24 24" style="width:17px;height:17px"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Retour à mon IKIGAI
+    </button>
+  </div>
+</div>
+
+<!-- ===== S10 : PROCHE ===== -->
+<div class="screen" id="screen-10">
+  <div class="proche-wrap">
+    <p class="hero-eyebrow">Mode "Proche"</p>
+    <h1 style="font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px">Tu réponds pour quelqu'un 🤝</h1>
+    <p style="font-size:15px;color:var(--text-muted);line-height:1.6;margin-bottom:24px">Ces 5 questions vont aider ton proche à se découvrir. Sois honnête et bienveillant(e) — tes réponses enrichiront son IKIGAI !</p>
+    <div class="q-card">
+      <div class="q-num">Pour commencer</div>
+      <div class="q-title">À propos de qui réponds-tu ?</div>
+      <input type="text" id="proche-name" placeholder="Son prénom..." style="width:100%;font-family:'DM Sans',sans-serif;font-size:16px;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;color:var(--text);background:var(--gray-light)">
+    </div>
+    <div class="q-card">
+      <div class="q-num">Ses talents</div>
+      <div class="q-title">Qu'est-ce que cette personne fait mieux que la majorité des gens que tu connais ?</div>
+      <textarea id="p-q1" placeholder="Il/Elle est particulièrement doué(e) pour..." oninput="autoResize(this)"></textarea>
+    </div>
+    <div class="q-card">
+      <div class="q-num">Ce qui l'anime</div>
+      <div class="q-title">Quand est-ce que tu la vois vraiment s'illuminer et s'investir à fond ?</div>
+      <textarea id="p-q2" placeholder="Je la vois vraiment s'enthousiasmer quand..." oninput="autoResize(this)"></textarea>
+    </div>
+    <div class="q-card">
+      <div class="q-num">Sa valeur pour les autres</div>
+      <div class="q-title">Pour quoi l'appellerais-tu en premier si tu avais besoin d'aide sur quelque chose d'important ?</div>
+      <textarea id="p-q3" placeholder="Je l'appellerais pour..." oninput="autoResize(this)"></textarea>
+    </div>
+    <div class="q-card">
+      <div class="q-num">Sa sensibilité au monde</div>
+      <div class="q-title">Y a-t-il des causes ou des injustices qui semblent la toucher ou l'indigner particulièrement ?</div>
+      <textarea id="p-q4" placeholder="Elle semble vraiment se soucier de..." oninput="autoResize(this)"></textarea>
+    </div>
+    <div class="q-card">
+      <div class="q-num">Ton message pour elle</div>
+      <div class="q-title">Qu'est-ce que tu voudrais qu'elle sache sur elle-même et qu'elle n'ose peut-être pas croire ?</div>
+      <textarea id="p-q5" placeholder="Ce que j'aimerais qu'elle réalise, c'est que..." oninput="autoResize(this)"></textarea>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="submitProche()">Envoyer mes réponses ✓</button>
+      <button class="btn btn-ghost" onclick="goTo(0)">← Annuler</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- MODAL SHARE -->
+<div class="modal-overlay hidden" id="share-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('share-modal').classList.add('hidden')">✕</button>
+    <div class="modal-h">Partager à un proche</div>
+    <p class="modal-p">Envoie ce lien — ton proche répondra à 5 questions sur toi et ses réponses enrichiront ton IKIGAI.</p>
+    <div class="share-link" onclick="copyShareLink(this)" style="margin-bottom:12px">🔗 https://ikigai-callo.fr/proche?token=abc123<span class="copy-pill">Copier</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button class="btn btn-secondary" style="font-size:13px" onclick="window.open('https://wa.me/?text=Aide-moi%20à%20trouver%20ma%20voie%20!%20Réponds%20à%205%20questions%20sur%20moi%20→%20https://ikigai-callo.fr/proche?token=abc123')">💚 WhatsApp</button>
+      <button class="btn btn-secondary" style="font-size:13px" onclick="window.open('sms:?body=Aide-moi%20→%20https://ikigai-callo.fr/proche?token=abc123')">💬 SMS</button>
+      <button class="btn btn-secondary" style="font-size:13px" onclick="window.open('mailto:?subject=5%20questions%20sur%20moi&body=https://ikigai-callo.fr/proche?token=abc123')">📧 Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROCHE CONFIRM -->
+<div class="modal-overlay hidden" id="modal-proche-ok">
+  <div class="modal-box" style="text-align:center">
+    <div style="font-size:52px;margin-bottom:12px">🎉</div>
+    <div class="modal-h">Merci !</div>
+    <p class="modal-p">Tes réponses ont bien été enregistrées et vont enrichir l'IKIGAI de <strong id="proche-ok-name">ton proche</strong>. Tu peux fermer cette page.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('modal-proche-ok').classList.add('hidden')">Fermer</button>
+  </div>
+</div>
+
+<script>
+const STEPS_DEF=[
+  {id:0,label:'Accueil',icon:'🏠'},
+  {id:1,label:'Ce que j\'aime',icon:'❤️'},
+  {id:2,label:'Mes talents',icon:'⚡'},
+  {id:3,label:'Le monde',icon:'🌍'},
+  {id:4,label:'Ma valeur',icon:'💶'},
+  {id:5,label:'Mon IKIGAI',icon:'🌟'},
+  {id:6,label:'Ressources',icon:'📁'}
+];
+const SKILL_ITEMS=[
+  {id:'sk1',label:'Communiquer à l\'oral'},
+  {id:'sk2',label:'Écrire / Rédiger'},
+  {id:'sk3',label:'Analyser / Résoudre'},
+  {id:'sk4',label:'Créer / Concevoir'},
+  {id:'sk5',label:'Organiser / Planifier'},
+  {id:'sk6',label:'Aider / Écouter'},
+  {id:'sk7',label:'Convaincre / Vendre'},
+  {id:'sk8',label:'Fabriquer / Faire'},
+  {id:'sk9',label:'Apprendre / Chercher'},
+  {id:'sk10',label:'Manager / Fédérer'}
+];
+
+let userName='',currentScreen=0,timerInterval=null,startTime=Date.now();
+let causesData=[],sectorsData=[];
+
+/* ── NAV ── */
+function buildNav(){
+  const row=document.getElementById('steps-row');
+  row.innerHTML='';
+  STEPS_DEF.forEach((s,i)=>{
+    const state=s.id<currentScreen?'done':(s.id===currentScreen?'active':'todo');
+    const canClick=s.id<=Math.max(currentScreen,1)||s.id===currentScreen;
+    const btn=document.createElement('button');
+    btn.className='step-btn '+state;
+    btn.disabled=!canClick&&s.id!==0;
+    btn.innerHTML=`<div class="step-circle">${state==='done'?'✓':s.icon}</div><div class="step-label">${s.label}</div>`;
+    btn.onclick=()=>{if(s.id<=currentScreen||s.id===0||s.id===6) goTo(s.id);};
+    row.appendChild(btn);
+    if(i<STEPS_DEF.length-1){
+      const line=document.createElement('div');
+      line.className='step-connector'+(s.id<currentScreen?' done':'');
+      row.appendChild(line);
+    }
+  });
+  const pct=Math.round((Math.min(currentScreen,5)/5)*100);
+  document.getElementById('pct-display').textContent=pct+'% complété';
+}
+
+function goTo(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const id=n===10?'screen-10':'screen-'+n;
+  const el=document.getElementById(id);
+  if(el){el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  if(n!==10&&n!==6) currentScreen=n;
+  buildNav();
+}
+
+/* ── START ── */
+function startJourney(){
+  userName=document.getElementById('user-name').value.trim()||'toi';
+  buildSkillSliders();
+  startTimer();
+  goTo(1);
+}
+
+function startTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  const MAX=20*60;
+  timerInterval=setInterval(()=>{
+    const left=Math.max(0,MAX-Math.floor((Date.now()-startTime)/1000));
+    const m=Math.floor(left/60),s=left%60;
+    document.getElementById('timer-display').textContent=m+':'+(s<10?'0':'')+s;
+    if(!left) clearInterval(timerInterval);
+  },1000);
+}
+
+/* ── SKILLS ── */
+function buildSkillSliders(){
+  const wrap=document.getElementById('skills-wrap');
+  wrap.innerHTML=SKILL_ITEMS.map(s=>`
+    <div class="slider-row">
+      <div class="slider-label">${s.label}</div>
+      <div class="slider-track">
+        <div class="slider-endpoints"><span>1</span><span>5</span><span>10</span></div>
+        <input type="range" min="1" max="10" value="5" id="${s.id}" oninput="updateTop3();document.getElementById('val-${s.id}').textContent=this.value">
+      </div>
+      <div class="slider-val-badge" id="val-${s.id}">5</div>
+    </div>`).join('');
+}
+function updateTop3(){
+  const sorted=[...SKILL_ITEMS].sort((a,b)=>{
+    const va=parseInt(document.getElementById(a.id)?.value||5);
+    const vb=parseInt(document.getElementById(b.id)?.value||5);
+    return vb-va;
+  });
+  const top3=sorted.slice(0,3);
+  const preview=document.getElementById('top3-preview');
+  const list=document.getElementById('top3-list');
+  preview.style.display='block';
+  list.innerHTML=top3.map((s,i)=>{
+    const v=document.getElementById(s.id)?.value||5;
+    return `<div style="margin-bottom:3px">${['🥇','🥈','🥉'][i]} ${s.label} <span style="font-size:12px;opacity:.7">(${v}/10)</span></div>`;
+  }).join('');
+}
+
+/* ── TAG RANKING ── */
+let tagRankState={};
+function toggleTagRank(el,tagsId,sortedId){
+  const text=el.firstChild.textContent.trim();
+  if(el.classList.contains('selected')){
+    el.classList.remove('selected');
+    delete tagRankState[tagsId+'-'+text];
+    refreshSorted(tagsId,sortedId);
+    return;
+  }
+  el.classList.add('selected');
+  const ranks=Object.keys(tagRankState).filter(k=>k.startsWith(tagsId+'-')).length+1;
+  tagRankState[tagsId+'-'+text]=ranks;
+  el.querySelector('.rank').textContent=ranks;
+  refreshSorted(tagsId,sortedId);
+  if(ranks>=2) document.getElementById('depth-1').style.display='block';
+}
+function refreshSorted(tagsId,sortedId){
+  const entries=Object.entries(tagRankState).filter(([k])=>k.startsWith(tagsId+'-')).sort((a,b)=>a[1]-b[1]);
+  const sorted=document.getElementById(sortedId);
+  if(!entries.length){sorted.style.display='none';return;}
+  sorted.style.display='block';
+  sorted.innerHTML=entries.map(([k,r],i)=>{
+    const label=k.replace(tagsId+'-','');
+    return `<div class="sorted-item" data-key="${k}" data-sorted="${sortedId}" data-tags="${tagsId}">
+      <div class="rank-badge">${r}</div>
+      <span style="flex:1;font-size:14px">${label}</span>
+      <div class="move-btns">
+        <button class="move-btn" onclick="moveItem('${k}','${tagsId}','${sortedId}',-1)">▲</button>
+        <button class="move-btn" onclick="moveItem('${k}','${tagsId}','${sortedId}',1)">▼</button>
+      </div>
+    </div>`;
+  }).join('');
+  const tags=document.querySelectorAll('#'+tagsId+' .tag.selected');
+  tags.forEach(t=>{
+    const text=t.firstChild.textContent.trim();
+    const entry=entries.find(([k])=>k===tagsId+'-'+text);
+    if(entry) t.querySelector('.rank').textContent=entry[1];
+  });
+}
+function moveItem(key,tagsId,sortedId,dir){
+  const entries=Object.entries(tagRankState).filter(([k])=>k.startsWith(tagsId+'-')).sort((a,b)=>a[1]-b[1]);
+  const idx=entries.findIndex(([k])=>k===key);
+  const newIdx=idx+dir;
+  if(newIdx<0||newIdx>=entries.length) return;
+  const tmpRank=tagRankState[key];
+  tagRankState[key]=tagRankState[entries[newIdx][0]];
+  tagRankState[entries[newIdx][0]]=tmpRank;
+  refreshSorted(tagsId,sortedId);
+}
+
+/* ── CAUSES with INTENSITY ── */
+function addCause(el){
+  const text=el.textContent.trim();
+  if(causesData.find(c=>c.label===text)) return;
+  causesData.push({label:text,intensity:2});
+  el.classList.add('selected');
+  renderCauses();
+}
+function renderCauses(){
+  const list=document.getElementById('causes-list');
+  list.innerHTML=causesData.map((c,i)=>`
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:500">${c.label}</span>
+        <button onclick="removeCause(${i})" style="border:none;background:none;color:var(--text-muted);cursor:pointer;font-size:18px;line-height:1">×</button>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Intensité de ton engagement</div>
+      <div class="intensity-scale">
+        <button class="int-btn int-1${c.intensity===1?' active':''}" onclick="setCauseIntensity(${i},1)">😐<br>Ça m'intéresse</button>
+        <button class="int-btn int-2${c.intensity===2?' active':''}" onclick="setCauseIntensity(${i},2)">🤔<br>Ça me préoccupe</button>
+        <button class="int-btn int-3${c.intensity===3?' active':''}" onclick="setCauseIntensity(${i},3)">😤<br>Ça m'indigne</button>
+        <button class="int-btn int-4${c.intensity===4?' active':''}" onclick="setCauseIntensity(${i},4)">🔥<br>Je veux agir</button>
+      </div>
+    </div>`).join('');
+}
+function setCauseIntensity(i,v){causesData[i].intensity=v;renderCauses();}
+function removeCause(i){
+  const label=causesData[i].label;
+  causesData.splice(i,1);
+  document.querySelectorAll('#causes-tags .tag').forEach(t=>{if(t.textContent.trim()===label) t.classList.remove('selected');});
+  renderCauses();
+}
+
+/* ── SECTORS with IMPORTANCE ── */
+function addSector(el){
+  const text=el.textContent.trim();
+  if(sectorsData.find(s=>s.label===text)) return;
+  sectorsData.push({label:text,level:2});
+  el.classList.add('selected');
+  renderSectors();
+}
+function renderSectors(){
+  const list=document.getElementById('sectors-list');
+  list.innerHTML=sectorsData.map((s,i)=>`
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:14px;font-weight:500">${s.label}</span>
+        <button onclick="removeSector(${i})" style="border:none;background:none;color:var(--text-muted);cursor:pointer;font-size:18px">×</button>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Niveau d'intérêt</div>
+      <div class="intensity-scale">
+        <button class="int-btn int-1${s.level===1?' active':''}" onclick="setSectorLevel(${i},1)">🤷<br>Pourquoi pas</button>
+        <button class="int-btn int-2${s.level===2?' active':''}" onclick="setSectorLevel(${i},2)">👍<br>Ça m'attire</button>
+        <button class="int-btn int-3${s.level===3?' active':''}" onclick="setSectorLevel(${i},3)">💪<br>Je me projette</button>
+        <button class="int-btn int-4${s.level===4?' active':''}" onclick="setSectorLevel(${i},4)">🎯<br>C'est mon objectif</button>
+      </div>
+    </div>`).join('');
+}
+function setSectorLevel(i,v){sectorsData[i].level=v;renderSectors();}
+function removeSector(i){
+  const label=sectorsData[i].label;
+  sectorsData.splice(i,1);
+  document.querySelectorAll('#sectors-tags .tag').forEach(t=>{if(t.textContent.trim()===label) t.classList.remove('selected');});
+  renderSectors();
+}
+
+/* ── MISC HELPERS ── */
+function toggleBlocked(id){const el=document.getElementById(id);el.style.display=el.style.display==='block'?'none':'block';}
+function toggleExpQual(id){const el=document.getElementById(id);el.style.display=el.style.display==='block'?'none':'block';}
+function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+function copyShareLink(el){
+  navigator.clipboard.writeText(el.textContent.replace('Copier','').trim()).catch(()=>{});
+  const pill=el.querySelector('.copy-pill');
+  if(pill){pill.textContent='Copié !';setTimeout(()=>pill.textContent='Copier',2000);}
+}
+function getRankedTags(tagsId){
+  return Object.entries(tagRankState).filter(([k])=>k.startsWith(tagsId+'-')).sort((a,b)=>a[1]-b[1]).map(([k])=>k.replace(tagsId+'-',''));
+}
+function getTop3Skills(){
+  return [...SKILL_ITEMS].sort((a,b)=>{
+    return parseInt(document.getElementById(b.id)?.value||5)-parseInt(document.getElementById(a.id)?.value||5);
+  }).slice(0,3).map(s=>({label:s.label,val:parseInt(document.getElementById(s.id)?.value||5)}));
+}
+function getSkillScoreAvg(){
+  return SKILL_ITEMS.reduce((a,s)=>a+parseInt(document.getElementById(s.id)?.value||5),0)/SKILL_ITEMS.length;
+}
+
+/* ── GENERATE RESULT ── */
+function generateResult(){
+  const aimesTags=getRankedTags('tags-1');
+  const aimes1=document.getElementById('q1-1').value;
+  const top3Skills=getTop3Skills();
+  const topCauses=causesData.filter(c=>c.intensity>=3).map(c=>c.label);
+  const topSectors=sectorsData.filter(s=>s.level>=2).sort((a,b)=>b.level-a.level).map(s=>s.label);
+  const exp1=document.getElementById('q4-1').value;
+  const exp2=document.getElementById('q4-2').value;
+
+  const aimesItems=[...aimesTags.slice(0,3),...extractWords(aimes1,2)].slice(0,4);
+  const talentsItems=top3Skills.map(s=>s.label+' ('+s.val+'/10)');
+  const mondeItems=[...topCauses.slice(0,3),...causesData.slice(0,2).map(c=>c.label)].filter((v,i,a)=>a.indexOf(v)===i).slice(0,4);
+  const paieItems=[...topSectors.slice(0,3),...extractWords(exp1,1),...extractWords(exp2,1)].slice(0,4);
+
+  document.getElementById('r-aimes').innerHTML=fill(aimesItems,'Tes passions en exploration');
+  document.getElementById('r-talents').innerHTML=fill(talentsItems,'Tes compétences à développer');
+  document.getElementById('r-monde').innerHTML=fill(mondeItems,'Tes valeurs en construction');
+  document.getElementById('r-paie').innerHTML=fill(paieItems,'Tes secteurs d\'intérêt');
+
+  buildIkigaiSentence(aimesItems,talentsItems,topCauses,topSectors);
+  buildIntersections(aimesItems,talentsItems,topCauses,topSectors);
+  buildPlanSteps(aimesItems,top3Skills,topSectors);
+  buildRDVReco(topSectors,top3Skills,topCauses);
+
+  document.getElementById('result-greeting').textContent='🌟 '+userName+', voici ton IKIGAI !';
+  document.getElementById('pdf-preview-name').textContent=userName+' — '+new Date().toLocaleDateString('fr-FR');
+
+  goTo(5);
+  setTimeout(drawRadar,400);
+}
+
+function fill(arr,fallback){
+  const items=arr.length?arr:[fallback];
+  return items.map(i=>`<li>${clean(i)}</li>`).join('');
+}
+function clean(s){return String(s).replace(/[→✓✗]/g,'').trim();}
+function extractWords(text,max){
+  if(!text||text.trim().length<10) return [];
+  return text.trim().split(/[\s,;.!?]+/).filter(w=>w.length>5).slice(0,max);
+}
+
+function buildIkigaiSentence(aimes,talents,causes,sectors){
+  const passion=clean(aimes[0])||'ce qui t\'anime';
+  const talent=clean(talents[0])||'tes capacités naturelles';
+  const cause=clean(causes[0])||'les enjeux qui te tiennent à cœur';
+  const sector=clean(sectors[0])||'un domaine qui te correspond';
+
+  const sentence=`Utiliser ta force "${talent}" pour "${passion}" au service de "${cause}"`;
+  const explain=`Concrètement, ton IKIGAI pointe vers des métiers dans ${sector} où tu pourrais combiner ce qui te passionne et ce en quoi tu excelles, tout en contribuant à quelque chose qui a du sens pour toi. Ce n'est pas une destination figée : c'est une direction, une boussole. Elle évoluera avec toi.`;
+
+  document.getElementById('ikigai-sentence').textContent=sentence;
+  document.getElementById('ikigai-explain').textContent=explain;
+}
+
+function buildIntersections(aimes,talents,causes,sectors){
+  const passion1=clean(aimes[0])||'ce que tu aimes';
+  const talent1=clean(talents[0])||'tes talents';
+  const cause1=clean(causes[0])||'tes engagements';
+  const sector1=clean(sectors[0])||'un secteur porteur';
+
+  const intersections=[
+    {
+      badge:'❤️ + ⚡',badgeColor:'var(--teal)',badgeBg:'var(--teal-light)',
+      name:'La Passion',
+      what:`Tu fais ce que tu aimes ("${passion1}") avec tes talents naturels ("${talent1}"). C'est là où tu es dans ton élément, où le temps passe vite et où tu donnes le meilleur de toi-même.`,
+      risk:`Attention : sans impact économique ou social clair, ça reste un hobby. La clé, c'est de trouver comment cette passion peut créer de la valeur réelle pour les autres.`,
+      riskColor:'var(--amber)',riskBg:'var(--amber-light)'
+    },
+    {
+      badge:'❤️ + 🌍',badgeColor:'var(--amber)',badgeBg:'var(--amber-light)',
+      name:'La Mission',
+      what:`Tu aimes "${passion1}" et tu veux contribuer à "${cause1}". Cette combinaison définit ta mission — ce que tu ferais même bénévolement, tant ça a du sens pour toi.`,
+      risk:`Attention : agir avec sens mais sans rémunération n'est pas durable. Explore l'ESS, le secteur public, les ONG ou intègre cette mission dans un emploi classique.`,
+      riskColor:'var(--coral)',riskBg:'var(--coral-light)'
+    },
+    {
+      badge:'⚡ + 💶',badgeColor:'var(--green)',badgeBg:'var(--green-light)',
+      name:'La Profession',
+      what:`Tes compétences en "${talent1}" ont de la valeur dans ${sector1}. C'est là où tu peux être rémunéré(e) et construire une carrière stable dès ton alternance.`,
+      risk:`Attention : travailler uniquement pour l'argent sans passion crée de la routine. Injecte du sens en connectant ton travail à ce qui te tient vraiment à cœur.`,
+      riskColor:'var(--gray)',riskBg:'var(--gray-light)'
+    },
+    {
+      badge:'🌍 + 💶',badgeColor:'var(--purple)',badgeBg:'var(--purple-light)',
+      name:'La Vocation',
+      what:`Contribuer à "${cause1}" dans ${sector1} peut te faire vivre. Ce carrefour génère de l'enthousiasme et du sens — même si ce n'est pas encore ta passion principale.`,
+      risk:`Attention : sans vraie passion, l'enthousiasme peut s'épuiser avec le temps. Cherche à intégrer progressivement ce que tu aimes vraiment dans ce rôle.`,
+      riskColor:'var(--purple)',riskBg:'var(--purple-light)'
+    }
+  ];
+
+  document.getElementById('inter-grid').innerHTML=intersections.map(ic=>`
+    <div class="inter-card">
+      <div class="ic-badge" style="background:${ic.badgeBg};color:${ic.badgeColor}">${ic.badge}</div>
+      <div class="ic-name">${ic.name}</div>
+      <div class="ic-what">${ic.what}</div>
+      <div class="ic-risk" style="background:${ic.riskBg};color:${ic.riskColor}">
+        <div class="r-label">⚠ Point de vigilance</div>
+        ${ic.risk}
+      </div>
+    </div>`).join('');
+}
+
+function buildPlanSteps(aimes,skills,sectors){
+  const s0=clean(sectors[0])||"ton secteur d'intérêt";
+  const sk0=clean((skills[0]&&skills[0].label)||"ton talent principal");
+  const steps=[
+    {num:1,title:"Cette semaine — Partage ton IKIGAI",desc:"Montre ce document à une personne de confiance et raconte-lui ce que tu as découvert. L'oral consolide ce que l'écrit a amorcé.",timing:"Dans les 7 jours"},
+    {num:2,title:"Ce mois — Explore concrètement",desc:"Fais un entretien exploratoire avec un professionnel de "+s0+". Cinq questions sur son quotidien suffisent pour valider ou ajuster ta direction.",timing:"Dans les 30 jours"},
+    {num:3,title:"Dans 2 mois — Renforce ton profil",desc:"Identifie une formation courte ou un MOOC pour développer ta compétence en "+sk0+". Même 10h d'apprentissage actif font une vraie différence.",timing:"Dans les 60 jours"},
+    {num:4,title:"Dans 3 mois — RDV conseiller Callo",desc:"Un conseiller t'aidera à transformer ton IKIGAI en projet concret : filière ciblée, entreprise d'alternance adaptée, lettre de motivation alignée avec ta raison d'être.",timing:"Dans les 90 jours"},
+    {num:5,title:"En continu — Fais vivre ton IKIGAI",desc:"L'IKIGAI n'est pas figé. Lors de chaque transition, reprends cet outil et mets-le à jour. Ta boussole évolue avec toi.",timing:"Tout au long de ta vie"}
+  ];
+  document.getElementById("plan-steps").innerHTML=steps.map(s=>`
+    <li class="plan-step">
+      <div class="ps-num">${s.num}</div>
+      <div class="ps-content">
+        <div class="ps-title">${s.title}</div>
+        <div class="ps-desc">${s.desc}</div>
+        <div class="ps-timing">${s.timing}</div>
+      </div>
+    </li>`).join("");
+}
+
+function buildRDVReco(sectors,skills,causes){
+  document.getElementById('rdv-filiere').textContent=sectors.length?sectors.slice(0,2).map(clean).join(' / '):'À définir avec un conseiller';
+  document.getElementById('rdv-entreprise').textContent=sectors.length?'PME / Startup spécialisée en '+clean(sectors[0]):'À explorer ensemble';
+  document.getElementById('rdv-missions').textContent=skills.length?skills.slice(0,2).map(s=>clean(s.label)).join(', '):'Selon ton profil IKIGAI';
+}
+
+/* ── RADAR ── */
+function drawRadar(){
+  const canvas=document.getElementById('radar-canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height,cx=W/2,cy=H/2+8,R=Math.min(W,H)/2-45;
+  ctx.clearRect(0,0,W,H);
+  const aimes=Math.min(10,(getRankedTags('tags-1').length*2)+3);
+  const talent=getSkillScoreAvg();
+  const monde=Math.min(10,(causesData.filter(c=>c.intensity>=3).length*3)+causesData.length);
+  const valeur=Math.min(10,(sectorsData.filter(s=>s.level>=3).length*3)+sectorsData.length);
+  const scores=[aimes,talent,monde,valeur].map(v=>Math.max(1.5,Math.min(10,v))/10);
+  const colors=['#1D9E75','#639922','#BA7517','#7F77DD'];
+  const labels=["❤️ Ce que j'aime","⚡ Mes talents","🌍 Le monde","💶 Ma valeur"];
+  const angles=scores.map((_,i)=>-Math.PI/2+i*(2*Math.PI/4));
+  for(let r=2;r<=5;r++){
+    ctx.beginPath();
+    angles.forEach((a,i)=>{const rr=R*(r/5),x=cx+rr*Math.cos(a),y=cy+rr*Math.sin(a);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+    ctx.closePath();ctx.strokeStyle='#E8E6E0';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle='rgba(0,0,0,.02)';ctx.fill();
+  }
+  angles.forEach(a=>{ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));ctx.strokeStyle='#D3D1C7';ctx.lineWidth=1;ctx.stroke();});
+  ctx.beginPath();
+  scores.forEach((s,i)=>{const x=cx+R*s*Math.cos(angles[i]),y=cy+R*s*Math.sin(angles[i]);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.closePath();ctx.fillStyle='rgba(29,158,117,.18)';ctx.fill();ctx.strokeStyle='#1D9E75';ctx.lineWidth=2.5;ctx.stroke();
+  scores.forEach((s,i)=>{
+    const x=cx+R*s*Math.cos(angles[i]),y=cy+R*s*Math.sin(angles[i]);
+    ctx.beginPath();ctx.arc(x,y,6,0,2*Math.PI);ctx.fillStyle=colors[i];ctx.fill();
+    ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();
+    ctx.font='bold 11px DM Sans,sans-serif';ctx.fillStyle=colors[i];ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(Math.round(s*10)+'/10',x,y-16);
+  });
+  labels.forEach((l,i)=>{
+    const x=cx+(R+30)*Math.cos(angles[i]),y=cy+(R+30)*Math.sin(angles[i]);
+    ctx.font='12px DM Sans,sans-serif';ctx.fillStyle='#5F5E5A';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(l,x,y);
+  });
+}
+
+/* ── PDF ── */
+function generatePDF(){
+  if(typeof window.jspdf==="undefined"&&typeof jspdf==="undefined"){
+    alert("Le PDF se charge encore. Attendez 3 secondes et reessayez, ou utilisez le bouton Imprimer.");
+    return;
+  }
+  const {jsPDF}=window.jspdf||jspdf;
+  const doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4"});
+  const W=doc.internal.pageSize.getWidth(),H=doc.internal.pageSize.getHeight();
+  const today=new Date().toLocaleDateString("fr-FR");
+  doc.setFillColor(59,109,17);doc.rect(0,0,W,36,"F");
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(20);doc.setFont("helvetica","bold");doc.text("Mon IKIGAI",14,14);
+  doc.setFontSize(10);doc.setFont("helvetica","normal");
+  doc.text(userName+" \u2014 P\u00f4le Sup Marcel Callo \u2014 "+today,14,24);
+  doc.setFontSize(8.5);doc.setTextColor(200,230,180);
+  doc.text("Ta boussole personnelle \u2014 fais-la \u00e9voluer avec toi.",14,31);
+  let y=44;
+  const ikS=document.getElementById("ikigai-sentence").textContent;
+  const ikE=document.getElementById("ikigai-explain").textContent;
+  doc.setFillColor(234,243,222);doc.roundedRect(10,y,W-20,30,4,4,"F");
+  doc.setTextColor(59,109,17);doc.setFontSize(8);doc.setFont("helvetica","bold");
+  doc.text("TA RAISON D'ETRE \u2014 TON IKIGAI",14,y+6);
+  doc.setFont("helvetica","italic");doc.setFontSize(10);
+  const sl=doc.splitTextToSize(ikS,W-28);doc.text(sl,14,y+13);
+  doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(95,94,90);
+  const el2=doc.splitTextToSize(ikE,W-28);doc.text(el2.slice(0,2),14,y+13+(sl.length*5));
+  y+=36;
+  const quads=[
+    {label:"CE QUE TU AIMES",el:"r-aimes",r:29,g:158,b:117,fr:225,fg:245,fb:238},
+    {label:"CE EN QUOI TU ES DOUE(E)",el:"r-talents",r:99,g:153,b:34,fr:234,fg:243,fb:222},
+    {label:"CE DONT LE MONDE A BESOIN",el:"r-monde",r:186,g:117,b:23,fr:250,fg:238,fb:218},
+    {label:"CE POUR QUOI TU PEUX ETRE PAYE(E)",el:"r-paie",r:127,g:119,b:221,fr:238,fg:237,fb:254}
+  ];
+  const qW=(W-26)/2;
+  quads.forEach((q,i)=>{
+    const col=10+(i%2)*(qW+6);const qy=y+Math.floor(i/2)*40;
+    doc.setFillColor(q.fr,q.fg,q.fb);doc.roundedRect(col,qy,qW,37,3,3,"F");
+    doc.setTextColor(q.r,q.g,q.b);doc.setFontSize(7.5);doc.setFont("helvetica","bold");
+    doc.text(q.label,col+4,qy+7);
+    doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(44,44,42);
+    const items=Array.from(document.getElementById(q.el).querySelectorAll("li")).map(li=>li.textContent);
+    items.slice(0,3).forEach((item,ii)=>doc.text("-> "+item.substring(0,36),col+4,qy+14+ii*7));
+  });
+  y+=86;
+  doc.setFillColor(245,245,243);doc.roundedRect(10,y,W-20,34,3,3,"F");
+  doc.setTextColor(59,109,17);doc.setFontSize(8.5);doc.setFont("helvetica","bold");
+  doc.text("TON PLAN D'ACTION IKIGAI",14,y+7);
+  doc.setFont("helvetica","normal");doc.setTextColor(44,44,42);doc.setFontSize(8);
+  Array.from(document.querySelectorAll(".plan-step")).slice(0,5).forEach((p,i)=>{
+    doc.text((i+1)+". "+p.querySelector(".ps-title").textContent.substring(0,54)+" ("+p.querySelector(".ps-timing").textContent+")",14,y+14+i*5);
+  });
+  y+=40;
+  doc.setFillColor(59,109,17);doc.roundedRect(10,y,W-20,22,4,4,"F");
+  doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont("helvetica","bold");
+  doc.text("RDV CONSEILLER \u2014 POLE SUP MARCEL CALLO",14,y+7);
+  doc.setFont("helvetica","normal");doc.setFontSize(8);
+  doc.text("Filiere : "+document.getElementById("rdv-filiere").textContent.substring(0,40),14,y+14);
+  doc.text("Missions : "+document.getElementById("rdv-missions").textContent.substring(0,40),W/2+4,y+14);
+  doc.text("Entreprise : "+document.getElementById("rdv-entreprise").textContent.substring(0,50),14,y+20);
+  doc.setFontSize(7);doc.setTextColor(180,178,169);
+  doc.text("Pole Sup Marcel Callo \u2022 21 av. Etienne Gason 35600 Redon \u2022 contact@lyceemarcelcallo.org",W/2,H-8,{align:"center"});
+  doc.text("Outil IKIGAI 2024",W/2,H-4,{align:"center"});
+  doc.save("ikigai-"+userName.toLowerCase().replace(/\s+/g,"-")+"-"+today.replace(/\//g,"-")+".pdf");
+}
+
+function sendByEmail(){
+  document.getElementById("email-modal").classList.remove("hidden");
+  setTimeout(()=>{const i=document.getElementById("email-input");if(i)i.focus();},100);
+}
+
+const EMAILJS_SERVICE_ID="service_XXXXX";
+const EMAILJS_TEMPLATE_ID="template_XXXXX";
+const EMAILJS_PUBLIC_KEY="XXXXXXXXXXXXX";
+
+function submitEmail(){
+  const addr=document.getElementById("email-input").value.trim();
+  const st=document.getElementById("email-status");
+  if(!addr||!addr.includes("@")){
+    st.style.display="block";st.style.background="var(--coral-light)";st.style.color="var(--coral)";
+    st.textContent="Merci d'entrer une adresse email valide.";return;
+  }
+  st.style.display="block";st.style.background="var(--teal-light)";st.style.color="var(--teal)";
+  st.textContent="Ouverture de votre messagerie...";
+  const ik=document.getElementById("ikigai-sentence").textContent;
+  const ai=Array.from(document.getElementById("r-aimes").querySelectorAll("li")).map(l=>l.textContent).join(", ");
+  const ta=Array.from(document.getElementById("r-talents").querySelectorAll("li")).map(l=>l.textContent).join(", ");
+  const mo=Array.from(document.getElementById("r-monde").querySelectorAll("li")).map(l=>l.textContent).join(", ");
+  const pa=Array.from(document.getElementById("r-paie").querySelectorAll("li")).map(l=>l.textContent).join(", ");
+  const fi=document.getElementById("rdv-filiere").textContent;
+  const en=document.getElementById("rdv-entreprise").textContent;
+  const mi=document.getElementById("rdv-missions").textContent;
+  if(EMAILJS_SERVICE_ID==="service_XXXXX"){
+    const nl="%0A";
+    const b=encodeURIComponent("Mon IKIGAI - "+userName)
+      +nl+nl+encodeURIComponent("Ma raison d etre : "+ik)
+      +nl+nl+encodeURIComponent("Ce que j aime : "+ai)
+      +nl+encodeURIComponent("Mes talents : "+ta)
+      +nl+encodeURIComponent("Le monde : "+mo)
+      +nl+encodeURIComponent("Ma valeur : "+pa)
+      +nl+nl+encodeURIComponent("Filiere : "+fi)
+      +nl+encodeURIComponent("Entreprise : "+en)
+      +nl+encodeURIComponent("Missions : "+mi)
+      +nl+nl+encodeURIComponent("Pole Sup Marcel Callo | contact@lyceemarcelcallo.org");
+    window.open("mailto:"+addr+"?subject="+encodeURIComponent("Mon IKIGAI - "+userName)+"&body="+b,"_blank");
+    setTimeout(()=>{document.getElementById("email-modal").classList.add("hidden");st.style.display="none";},3000);
+    return;
+  }
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+  emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+    to_email:addr,prenom:userName,ikigai_sentence:ik,
+    ce_que_jaime:ai,mes_talents:ta,le_monde:mo,ma_valeur:pa,
+    filiere:fi,entreprise:en,missions:mi,
+    date:new Date().toLocaleDateString("fr-FR")
+  }).then(()=>{
+    st.textContent="Email envoye avec succes !";
+    setTimeout(()=>{document.getElementById("email-modal").classList.add("hidden");st.style.display="none";document.getElementById("email-input").value="";},3000);
+  }).catch(err=>{
+    st.style.background="var(--coral-light)";st.style.color="var(--coral)";
+    st.textContent="Erreur envoi. Utilisez le bouton Imprimer.";
+    console.error("EmailJS:",err);
+  });
+}
+
+
+/* ── PROCHE ── */
+function submitProche(){
+  const name=document.getElementById('proche-name').value||'ton proche';
+  document.getElementById('proche-ok-name').textContent=name;
+  document.getElementById('modal-proche-ok').classList.remove('hidden');
+}
+
+/* ── RESET ── */
+function resetAll(){
+  document.querySelectorAll('textarea').forEach(t=>{t.value='';t.style.height='';});
+  document.querySelectorAll('.tag.selected').forEach(t=>t.classList.remove('selected'));
+  document.querySelectorAll('input[type=range]').forEach(r=>r.value=5);
+  document.querySelectorAll('.blocked-box').forEach(b=>b.style.display='none');
+  causesData=[];sectorsData=[];tagRankState={};
+  const els=['causes-list','sectors-list'];
+  els.forEach(id=>{const e=document.getElementById(id);if(e) e.innerHTML='';});
+  const s1=document.getElementById('sorted-1');if(s1) s1.style.display='none';
+  const d1=document.getElementById('depth-1');if(d1) d1.style.display='none';
+  const tp=document.getElementById('top3-preview');if(tp) tp.style.display='none';
+  document.getElementById('user-name').value='';
+  userName='';
+  if(timerInterval) clearInterval(timerInterval);
+  document.getElementById('timer-display').textContent='20:00';
+  startTime=Date.now();currentScreen=0;buildNav();
+}
+
+/* ── INIT ── */
+buildNav();
+document.getElementById('user-name').addEventListener('keypress',e=>{if(e.key==='Enter') startJourney();});
+</script>
+
+<div class="modal-overlay hidden" id="email-modal">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="document.getElementById('email-modal').classList.add('hidden')">&#x2715;</button>
+    <div style="font-size:28px;margin-bottom:10px">&#x1F4E7;</div>
+    <div class="modal-h">Recevoir ton IKIGAI par email</div>
+    <p class="modal-p">Entre ton adresse email pour recevoir un résumé de ton IKIGAI.</p>
+    <input type="email" id="email-input" placeholder="ton@email.fr" style="width:100%;font-family:'DM Sans',sans-serif;font-size:15px;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:12px;color:var(--text);display:block">
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1" onclick="submitEmail()">Envoyer</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('email-modal').classList.add('hidden')">Annuler</button>
+    </div>
+    <div id="email-status" style="margin-top:10px;font-size:14px;display:none;padding:8px 12px;border-radius:8px"></div>
+  </div>
+</div>
+</body>
+</html>
